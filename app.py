@@ -52,33 +52,33 @@ coren = st.text_input("Coren", key="login_coren")
 senha = st.text_input("Senha", type="password", key="login_senha")
 
 if st.button("Entrar"):
-gerente = autenticar(coren, senha)
-    if gerente:
-        st.success(f"Bem-vindo(a), {gerente[1]}! Gestão autorizada.")
-        menu = ["Novo Prestador", "Gerenciar Escala"]
-        escolha = st.sidebar.selectbox("Menu", menu)
+    gerente = autenticar(coren, senha)
+        if gerente:
+            st.success(f"Bem-vindo(a), {gerente[1]}! Gestão autorizada.")
+            menu = ["Novo Prestador", "Gerenciar Escala"]
+            escolha = st.sidebar.selectbox("Menu", menu)
 
-        if escolha == "Novo Prestador":
-            st.subheader("Cadastro de Prestador")
-            nome = st.text_input("Nome completo")
-            novo_coren = st.text_input("Coren", key="cadastro_coren")
-            cargo = st.selectbox("Cargo", ["Enfermeira", "Tec. Enf", "SUPERVISOR", "HOSPITALISTA", "NIR", "Aux. Enf."])
-            tipo = st.selectbox("Tipo de vínculo", ["FT - EFETIVADO", "PJ - PROGRAMA ANJO"])
-            data_adm = st.date_input("Data de admissão")
-            if st.button("Cadastrar"):
-                try:
-                    cursor.execute("""
-                    INSERT INTO usuarios (nome, coren, senha, cargo, tipo_vinculo, data_admissao)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                    """, (nome, novo_coren, nova_senha, cargo, tipo, data_adm.strftime('%Y-%m-%d')))
-                    conn.commit()
-                    st.success("Prestador cadastrado com sucesso!")
-                except:
-                    st.error("Erro: Coren já existente ou inválido")
+            if escolha == "Novo Prestador":
+                st.subheader("Cadastro de Prestador")
+                nome = st.text_input("Nome completo")
+                novo_coren = st.text_input("Coren", key="cadastro_coren")
+                cargo = st.selectbox("Cargo", ["Enfermeira", "Tec. Enf", "SUPERVISOR", "HOSPITALISTA", "NIR", "Aux. Enf."])
+                tipo = st.selectbox("Tipo de vínculo", ["FT - EFETIVADO", "PJ - PROGRAMA ANJO"])
+                data_adm = st.date_input("Data de admissão")
+                if st.button("Cadastrar"):
+                    try:
+                        cursor.execute("""
+                        INSERT INTO usuarios (nome, coren, senha, cargo, tipo_vinculo, data_admissao)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                        """, (nome, novo_coren, nova_senha, cargo, tipo, data_adm.strftime('%Y-%m-%d')))
+                        conn.commit()
+                        st.success("Prestador cadastrado com sucesso!")
+                    except:
+                        st.error("Erro: Coren já existente ou inválido")
 
-        elif escolha == "Gerenciar Escala":
-            st.subheader("Gerenciar Escala Mensal")
-            cursor.execute("SELECT id, nome FROM usuarios")
+         elif escolha == "Gerenciar Escala":
+             st.subheader("Gerenciar Escala Mensal")
+             cursor.execute("SELECT id, nome FROM usuarios")
             prestadores = cursor.fetchall()
             prestador = st.selectbox("Escolha o prestador:", prestadores, format_func=lambda x: x[1])
             mes_atual = datetime.now().replace(day=1)
