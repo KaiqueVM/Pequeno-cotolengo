@@ -35,18 +35,18 @@ CREATE TABLE IF NOT EXISTS escalas (
 # Inserir gerente padrão
 cursor.execute("SELECT * FROM usuarios WHERE coren='56.127'")
 if not cursor.fetchone():
-    cursor.execute("""
+    cursor.execute(""" 
     INSERT INTO usuarios (nome, coren, senha, cargo, tipo_vinculo, data_admissao, gerente)
-    VALUES (?, ?, ?, ?, ?, ?, 1)
+    VALUES (?, ?, ?, ?, ?, ?, 1) 
     """, ("Administrador", "56.127", "147258", "SUPERVISOR", "FT - EFETIVADO", datetime.now().strftime('%Y-%m-%d')))
     conn.commit()
 
-def autenticar(coren, senha):
-    cursor.execute("SELECT * FROM usuarios WHERE coren=? AND senha=? AND gerente=1", (coren, senha))
+def autenticar(coren):
+    cursor.execute("SELECT * FROM usuarios WHERE coren=? AND gerente=1", (coren))
     return cursor.fetchone()
 
 st.set_page_config(page_title="Sistema de Escalas", layout="wide")
-st.title("Gerenciamento de Escalas - Somente Gerência")
+st.title("Gerenciamento de Escala - Somente Gerência")
 
 coren = st.text_input("Coren", key="login_coren")
 senha = st.text_input("Senha", type="password", key="login_senha")
@@ -62,9 +62,8 @@ if st.button("Entrar"):
             st.subheader("Cadastro de Prestador")
             nome = st.text_input("Nome completo")
             novo_coren = st.text_input("Coren", key="cadastro_coren")
-            nova_senha = st.text_input("Senha", type="password", key="cadastro_senha")
             cargo = st.selectbox("Cargo", ["Enfermeira", "Tec. Enf", "SUPERVISOR", "HOSPITALISTA", "NIR", "Aux. Enf."])
-            tipo = st.selectbox("Tipo de vínculo", ["FT - EFETIVADO", "PJ - TERCEIRIZADO"])
+            tipo = st.selectbox("Tipo de vínculo", ["FT - EFETIVADO", "PJ - PROGRAMA ANJO"])
             data_adm = st.date_input("Data de admissão")
             if st.button("Cadastrar"):
                 try:
