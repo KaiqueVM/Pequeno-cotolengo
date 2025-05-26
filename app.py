@@ -52,7 +52,7 @@ coren = st.text_input("Coren", key="login_coren")
 senha = st.text_input("Senha", type="password", key="login_senha")
 
 if st.button("Entrar"):
-    gerente = autenticar(coren, senha)
+gerente = autenticar(coren, senha)
     if gerente:
         st.success(f"Bem-vindo(a), {gerente[1]}! Gestão autorizada.")
         menu = ["Novo Prestador", "Gerenciar Escala"]
